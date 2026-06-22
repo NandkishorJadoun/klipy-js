@@ -1,16 +1,8 @@
-import type { KlipyItem, KlipyPage, KlipyResponse } from './types'
+import type { KlipyCategoryPage, KlipyItemsPage, KlipyPage, KlipyResponse } from './types'
+import type { GifCategoriesParams, GifItemsParams, GifRecentParams, GifSearchParams, GifTrendingParams } from './types/params'
 
 export interface KlipyClientOptions {
   apiKey: string
-}
-
-export interface GifSearchParams {
-  q: string
-  customerId?: string
-  page?: number
-  perPage?: number
-  locale?: string
-  contentFilter?: 'off' | 'low' | 'medium' | 'high'
 }
 
 export class KlipyClient {
@@ -36,7 +28,9 @@ export class KlipyClient {
 
     const res = await fetch(url, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
 
     if (!res.ok) {
@@ -53,14 +47,41 @@ export class KlipyClient {
   }
 
   gifs = {
-    search: (params: GifSearchParams): Promise<KlipyPage<KlipyItem>> =>
-      this.request<KlipyPage<KlipyItem>>('/gifs/search', {
+    search: (params: GifSearchParams): Promise<KlipyPage> =>
+      this.request<KlipyPage>('/gifs/search', {
         q: params.q,
         customer_id: params.customerId,
         page: params.page,
         per_page: params.perPage,
         locale: params.locale,
         content_filter: params.contentFilter,
+        format_filter: params.formatFilter,
+      }),
+
+    trending: (params: GifTrendingParams): Promise<KlipyPage> =>
+      this.request<KlipyPage>('/gifs/trending', {
+        customer_id: params.customerId,
+        page: params.page,
+        per_page: params.perPage,
+        locale: params.locale,
+        content_filter: params.contentFilter,
+        format_filter: params.formatFilter,
+      }),
+
+    categories: (params: GifCategoriesParams): Promise<KlipyCategoryPage> =>
+      this.request<KlipyCategoryPage>('/gifs/categories', {
+        locale: params.locale,
+      }),
+
+    recent: (params: GifRecentParams): Promise<KlipyPage> =>
+      this.request<KlipyPage>(`/gifs/recent/${params.customerId}`, {
+        page: params.page,
+        per_page: params.perPage,
+      }),
+
+    items: (params: GifItemsParams): Promise<KlipyItemsPage> =>
+      this.request<KlipyItemsPage>('/gifs/items', {
+        slugs: params.slugs,
       }),
   }
 }

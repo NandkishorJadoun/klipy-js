@@ -32,11 +32,30 @@ export interface KlipyItem {
   blur_preview: string
 }
 
-export interface KlipyPage<T> {
-  data: T[]
+export interface KlipyPage {
+  data: KlipyItem[]
   current_page: number
   per_page: number
   has_next: boolean
+  meta: {
+    item_min_width: number
+    ad_max_resize_percent: number
+  }
+}
+
+export interface KlipyCategoryPage {
+  locale: string
+  categories: KlipyCategoryItem[]
+}
+
+export interface KlipyCategoryItem {
+  category: string
+  query: string
+  preview_url: string
+}
+
+export interface KlipyItemsPage {
+  data: KlipyItem[]
   meta: {
     item_min_width: number
     ad_max_resize_percent: number
