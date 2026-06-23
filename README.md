@@ -1,1 +1,1 @@
-# klipy-sdk
+# klipy-js
