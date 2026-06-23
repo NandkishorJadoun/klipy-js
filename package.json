@@ -1,7 +1,7 @@
 {
   "name": "klipy-js",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "packageManager": "pnpm@11.1.3",
   "description": "Typed JavaScript/TypeScript SDK for the KLIPY API",
   "author": "Nandkishor Jadoun <nandkishorjadoun1@gmail.com>",
@@ -12,7 +12,13 @@
     "url": "git+https://github.com/nandkishorjadoun/klipy-js.git"
   },
   "bugs": "https://github.com/nandkishorjadoun/klipy-js/issues",
-  "keywords": ["klipy", "gif", "sdk", "api-client", "typescript"],
+  "keywords": [
+    "klipy",
+    "gif",
+    "sdk",
+    "api-client",
+    "typescript"
+  ],
   "sideEffects": false,
   "exports": {
     ".": "./dist/index.mjs",
