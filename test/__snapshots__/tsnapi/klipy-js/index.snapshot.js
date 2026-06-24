@@ -3,10 +3,11 @@
  */
 // #region Classes
 export class KlipyClient {
-  apiKey
-  baseUrl
-  constructor(_) {}
-  async request(_, _) {}
   gifs
+  stickers
+  memes
+  emojis
+  clips
+  constructor(_) {}
 }
 // #endregion
