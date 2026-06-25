@@ -11,32 +11,23 @@ export interface Category {
   query: string;
   preview_url: string;
 }
-export interface HttpClientOptions {
-  apiKey: string;
+export interface ClipItem {
+  url: string;
+  title: string;
+  slug: string;
+  file: ClipFile;
+  file_meta: ClipFormats;
+  tags: string[];
+  type: 'clip';
+  blur_preview: string;
 }
-export interface KlipyClientOptions {
-  apiKey: string;
+export interface ClipPage {
+  data: ClipItem[];
+  meta: Meta;
 }
-export interface KlipyResponse<T> {
-  result: boolean;
-  data: T;
-}
+export interface ClipPaginatedPage extends ClipPage, Pagination {}
 export interface MediaCategoriesParams {
   locale?: string;
-}
-export interface MediaFile<TFormat> {
-  hd: TFormat;
-  md: TFormat;
-  sm: TFormat;
-  xs: TFormat;
-}
-export interface MediaFormats {
-  gif: Rendition;
-  webp: Rendition;
-  jpg: Rendition;
-  png: Rendition;
-  mp4: Rendition;
-  webm: Rendition;
 }
 export interface MediaHideFromRecentsParams {
   slug: string;
@@ -94,19 +85,39 @@ export interface Pagination {
   per_page: number;
   has_next: boolean;
 }
+export interface Rendition {
+  url: string;
+  width: number;
+  height: number;
+  size: number;
+}
 // #endregion
 
 // #region Types
+export type ClipClient = ClipClient$1;
+export type ContentFilter = 'off' | 'low' | 'medium' | 'high';
+export type EmojiClient = MediaClientFor<'emoji'>;
+export type FormatFilter = 'gif' | 'webp' | 'jpg' | 'mp4' | 'webm';
+export type GifClient = MediaClientFor<'gif'>;
 export type MediaContentType = 'gif' | 'sticker' | 'meme' | 'emoji';
+export type MediaReportReasons = 'nudity' | 'violence' | 'hate_speech' | 'harassment' | 'spam' | 'misinformation' | 'copyright' | 'offensive' | 'illegal' | 'broken' | 'low_quality' | 'not_relevant';
+export type MemeClient = MediaClientFor<'meme'>;
+export type StickerClient = MediaClientFor<'sticker'>;
 // #endregion
 
 // #region Classes
+export declare class KlipyApiError extends Error {
+  readonly status: number;
+  readonly statusText: string;
+  readonly body: unknown;
+  constructor(_: number, _: string, _: unknown);
+}
 export declare class KlipyClient {
-  readonly gifs: MediaClient<MediaPaginatedPage<'gif'>, MediaPage<'gif'>>;
-  readonly stickers: MediaClient<MediaPaginatedPage<'sticker'>, MediaPage<'sticker'>>;
-  readonly memes: MediaClient<MediaPaginatedPage<'meme'>, MediaPage<'meme'>>;
-  readonly emojis: MediaClient<MediaPaginatedPage<'emoji'>, MediaPage<'emoji'>>;
-  readonly clips: ClipClient;
+  readonly gifs: GifClient;
+  readonly stickers: StickerClient;
+  readonly memes: MemeClient;
+  readonly emojis: EmojiClient;
+  readonly clips: ClipClient$1;
   constructor({
     apiKey
   }: KlipyClientOptions);
