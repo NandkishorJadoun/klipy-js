@@ -74,3 +74,12 @@ export interface Category {
   query: string
   preview_url: string
 }
+
+export interface KlipyResponse<T> {
+  result: boolean
+  data: T
+}
+
+export interface KlipyApiErrorResponse {
+  errors: unknown
+}

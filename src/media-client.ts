@@ -60,14 +60,23 @@ export class MediaClient<TPage, TItem> {
   }
 
   hideFromRecents(params: MediaHideFromRecentsParams): Promise<void> {
-    return this.api.delete<void>(`/${this.resource}/hide-from-recents`, params)
+    return this.api.delete<void>(`/${this.resource}/recent/${params.customerId}`, {
+      slug: params.slug,
+      customer_id: params.customerId,
+    })
   }
 
   shareTrigger(params: MediaShareTriggerParams): Promise<void> {
-    return this.api.post<void>(`/${this.resource}/share-trigger`, params)
+    return this.api.post<void>(`/${this.resource}/share/${params.slug}`, {
+      customer_id: params.customerId,
+      q: params.q,
+    })
   }
 
   report(params: MediaReportParams): Promise<void> {
-    return this.api.post<void>(`/${this.resource}/report`, params)
+    return this.api.post<void>(`/${this.resource}/report/${params.slug}`, {
+      customer_id: params.customerId,
+      reason: params.reason,
+    })
   }
 }

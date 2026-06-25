@@ -1,13 +1,21 @@
-export interface KlipyResponse<T> {
-  result: boolean
-  data: T
-}
+import type { KlipyApiErrorResponse, KlipyResponse } from './types'
 
 export interface HttpClientOptions {
   apiKey: string
 }
 
 export type HttpMethod = 'GET' | 'POST' | 'DELETE'
+
+export class KlipyApiError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly statusText: string,
+    public readonly body: unknown,
+  ) {
+    super(`${status} ${statusText}`)
+    this.name = 'KlipyApiError'
+  }
+}
 
 export class HttpClient {
   constructor(private readonly options: HttpClientOptions, private readonly baseUrl = 'https://api.klipy.com/api/v1') { }
@@ -16,8 +24,8 @@ export class HttpClient {
     path: string,
     options: {
       method: HttpMethod
-      query?: Record<string, string | number | boolean | undefined>
-      body?: unknown
+      query?: Record<string, string | number | undefined>
+      body?: Record<string, string | undefined>
     },
   ): Promise<T> {
     const {
@@ -34,10 +42,7 @@ export class HttpClient {
       }
     }
 
-    const headers: Record<string, string> = {}
-    if (body) {
-      headers['Content-Type'] = 'application/json'
-    }
+    const headers = { 'Content-Type': 'application/json' }
 
     const res = await fetch(url, {
       method,
@@ -46,10 +51,11 @@ export class HttpClient {
     })
 
     if (!res.ok) {
-      const text = await res.text()
-      throw new Error(
-        `KLIPY API error: ${res.status} ${res.statusText}
-                ${text}`,
+      const { errors } = await res.json() as KlipyApiErrorResponse
+      throw new KlipyApiError(
+        res.status,
+        res.statusText,
+        errors,
       )
     }
 
@@ -64,7 +70,7 @@ export class HttpClient {
 
   get<T>(
     path: string,
-    query?: Record<string, string | number | boolean | undefined>,
+    query?: Record<string, string | number | undefined>,
   ): Promise<T> {
     return this.request<T>(path, {
       method: 'GET',
@@ -74,7 +80,7 @@ export class HttpClient {
 
   post<T>(
     path: string,
-    body?: unknown,
+    body?: Record<string, string | undefined>,
   ): Promise<T> {
     return this.request<T>(path, {
       method: 'POST',
@@ -84,11 +90,11 @@ export class HttpClient {
 
   delete<T>(
     path: string,
-    body?: unknown,
+    query?: Record<string, string>,
   ): Promise<T> {
     return this.request<T>(path, {
       method: 'DELETE',
-      body,
+      query,
     })
   }
 }

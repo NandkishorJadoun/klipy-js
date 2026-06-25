@@ -39,7 +39,7 @@ export interface MediaFormats {
   webm: Rendition;
 }
 export interface MediaHideFromRecentsParams {
-  slugs: string;
+  slug: string;
   customerId: string;
 }
 export interface MediaItem<T extends MediaContentType> {
@@ -52,7 +52,7 @@ export interface MediaItem<T extends MediaContentType> {
   blur_preview: string;
 }
 export interface MediaItemsParams {
-  slugs?: string;
+  slugs: string;
 }
 export interface MediaPage<T extends MediaContentType> {
   data: MediaItem<T>[];
@@ -67,7 +67,7 @@ export interface MediaRecentParams extends MediaPaginationParams {
   customerId: string;
 }
 export interface MediaReportParams {
-  slugs: string;
+  slug: string;
   reason: MediaReportReasons;
   customerId?: string;
 }
@@ -75,15 +75,15 @@ export interface MediaSearchParams extends MediaTrendingParams {
   q: string;
 }
 export interface MediaShareTriggerParams {
-  slugs: string;
-  q: string;
+  slug: string;
+  q?: string;
   customerId?: string;
 }
 export interface MediaTrendingParams extends MediaPaginationParams {
   customerId?: string;
   locale?: string;
-  contentFilter?: ContentFilter;
   formatFilter?: FormatFilter;
+  contentFilter?: ContentFilter;
 }
 export interface Meta {
   item_min_width: number;

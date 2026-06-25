@@ -58,14 +58,23 @@ export class ClipClient {
   }
 
   hideFromRecents(params: MediaHideFromRecentsParams): Promise<void> {
-    return this.api.delete<void>('/clips/hide-from-recents', params)
+    return this.api.delete<void>(`/clips/recent/${params.customerId}`, {
+      slug: params.slug,
+      customer_id: params.customerId,
+    })
   }
 
   shareTrigger(params: MediaShareTriggerParams): Promise<void> {
-    return this.api.post<void>('/clips/share-trigger', params)
+    return this.api.post<void>(`/clips/share/${params.slug}`, {
+      customer_id: params.customerId,
+      q: params.q,
+    })
   }
 
   report(params: MediaReportParams): Promise<void> {
-    return this.api.post<void>('/clips/report', params)
+    return this.api.post<void>(`/clips/report/${params.slug}`, {
+      customer_id: params.customerId,
+      reason: params.reason,
+    })
   }
 }

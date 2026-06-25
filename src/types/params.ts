@@ -12,8 +12,8 @@ export interface MediaPaginationParams {
 export interface MediaTrendingParams extends MediaPaginationParams {
   customerId?: string
   locale?: string
-  contentFilter?: ContentFilter
   formatFilter?: FormatFilter
+  contentFilter?: ContentFilter
 }
 
 export interface MediaSearchParams extends MediaTrendingParams {
@@ -29,22 +29,22 @@ export interface MediaCategoriesParams {
 }
 
 export interface MediaItemsParams {
-  slugs?: string
+  slugs: string
 }
 
 export interface MediaHideFromRecentsParams {
-  slugs: string
+  slug: string
   customerId: string
 }
 
 export interface MediaShareTriggerParams {
-  slugs: string
-  q: string
+  slug: string
+  q?: string
   customerId?: string
 }
 
 export interface MediaReportParams {
-  slugs: string
+  slug: string
   reason: MediaReportReasons
   customerId?: string
 }

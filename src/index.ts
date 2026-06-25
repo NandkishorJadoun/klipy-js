@@ -3,11 +3,12 @@ import { ClipClient } from './clip-client'
 import { HttpClient } from './http-client'
 import { MediaClient } from './media-client'
 
-export type { HttpClientOptions, KlipyResponse } from './http-client'
+export type { HttpClientOptions } from './http-client'
 
 export type {
   CategoriesData,
   Category,
+  KlipyResponse,
   MediaContentType,
   MediaFile,
   MediaFormats,
