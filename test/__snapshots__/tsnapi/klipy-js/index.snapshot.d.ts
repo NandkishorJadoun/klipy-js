@@ -108,9 +108,8 @@ export type StickerClient = MediaClientFor<'sticker'>;
 // #region Classes
 export declare class KlipyApiError extends Error {
   readonly status: number;
-  readonly statusText: string;
   readonly body: unknown;
-  constructor(_: number, _: string, _: unknown);
+  constructor(_: number, _: unknown);
 }
 export declare class KlipyClient {
   readonly gifs: GifClient;
@@ -118,8 +117,11 @@ export declare class KlipyClient {
   readonly memes: MemeClient;
   readonly emojis: EmojiClient;
   readonly clips: ClipClient$1;
+  private readonly http;
   constructor({
     apiKey
   }: KlipyClientOptions);
+  searchSuggestions(_: SuggestionParams): Promise<string[]>;
+  autocomplete(_: SuggestionParams): Promise<string[]>;
 }
 // #endregion

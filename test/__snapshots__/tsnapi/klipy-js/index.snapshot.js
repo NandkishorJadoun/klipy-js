@@ -4,9 +4,8 @@
 // #region Classes
 export class KlipyApiError extends Error {
   status
-  statusText
   body
-  constructor(_, _, _) {}
+  constructor(_, _) {}
 }
 export class KlipyClient {
   gifs
@@ -14,6 +13,9 @@ export class KlipyClient {
   memes
   emojis
   clips
+  http
   constructor(_) {}
+  searchSuggestions(_) {}
+  autocomplete(_) {}
 }
 // #endregion
