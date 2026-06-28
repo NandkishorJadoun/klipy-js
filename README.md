@@ -31,7 +31,7 @@ const client = new KlipyClient({ apiKey: '...' })
 
 `apiKey` is required. The client throws if it is missing or empty.
 
-The client exposes five readonly properties:
+The client exposes five readonly properties and two utility methods:
 
 | Property | Type |
 |---|---|
@@ -191,6 +191,24 @@ await client.clips.report({ slug: 'hello', reason: 'spam' })
 
 The `search`, `trending`, and `recent` methods return `ClipPaginatedPage`. The `items` method returns `ClipPage`. All other methods return `void`.
 
+### Search suggestions
+
+`client.searchSuggestions(params)` and `client.autocomplete(params)` return search term suggestions directly on the client.
+
+```ts
+const suggestions = await client.searchSuggestions({ q: 'hel', limit: 5 })
+// typeof suggestions — string[]
+const auto = await client.autocomplete({ q: 'hel', limit: 5 })
+// typeof auto — string[]
+```
+
+`params` — `SuggestionParams`:
+
+| Field | Type | Required |
+|---|---|---|
+| `q` | `string` | yes |
+| `limit` | `number` | no |
+
 ## Pagination
 
 Methods that return paginated results accept `page` and `perPage` in their params. The response includes pagination fields directly on the result object:
@@ -226,7 +244,7 @@ The package exports the following types for consumers:
 `GifClient`, `StickerClient`, `MemeClient`, `EmojiClient`, `ClipClient`
 
 **Param types**
-`MediaSearchParams`, `MediaTrendingParams`, `MediaRecentParams`, `MediaCategoriesParams`, `MediaItemsParams`, `MediaHideFromRecentsParams`, `MediaShareTriggerParams`, `MediaReportParams`, `MediaPaginationParams`
+`MediaSearchParams`, `MediaTrendingParams`, `MediaRecentParams`, `MediaCategoriesParams`, `MediaItemsParams`, `MediaHideFromRecentsParams`, `MediaShareTriggerParams`, `MediaReportParams`, `MediaPaginationParams`, `SuggestionParams`
 
 **Filter types**
 `ContentFilter` (`'off' | 'low' | 'medium' | 'high'`), `FormatFilter` (`'gif' | 'webp' | 'jpg' | 'mp4' | 'webm'`), `MediaReportReasons`
@@ -244,10 +262,6 @@ try {
 catch (error) {
   if (error instanceof KlipyApiError) {
     console.log(error.status) // number
-    console.log(error.statusText) // string
     console.log(error.body) // unknown
   }
 }
-```
-
-If the API responds with `result: false` (HTTP 2xx with business-logic failure), a generic `Error` with message `"KLIPY API returned result: false"` is thrown.
