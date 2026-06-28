@@ -9,10 +9,9 @@ export type HttpMethod = 'GET' | 'POST' | 'DELETE'
 export class KlipyApiError extends Error {
   constructor(
     public readonly status: number,
-    public readonly statusText: string,
     public readonly body: unknown,
   ) {
-    super(`${status} ${statusText}`)
+    super(`KLIPY API error: ${status}`)
     this.name = 'KlipyApiError'
   }
 }
@@ -51,19 +50,18 @@ export class HttpClient {
     })
 
     if (!res.ok) {
-      const { errors } = await res.json() as KlipyApiErrorResponse
-      throw new KlipyApiError(
-        res.status,
-        res.statusText,
-        errors,
-      )
+      let errorBody: unknown
+      try {
+        const parsed = await res.json() as KlipyApiErrorResponse
+        errorBody = parsed.errors
+      }
+      catch {
+        errorBody = await res.text().catch(() => undefined)
+      }
+      throw new KlipyApiError(res.status, errorBody)
     }
 
     const json = await res.json() as KlipyResponse<T>
-
-    if (!json.result) {
-      throw new Error('KLIPY API returned result: false')
-    }
 
     return json.data
   }
